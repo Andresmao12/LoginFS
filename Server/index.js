@@ -1,6 +1,6 @@
 const express = require('express')
 const path = require('path')
-const login = require('./rutas/login')
+const routeAccess = require('./routes/routesAccess')
 const cors = require('cors')
 
 // import authenticator from "./controllers/authenticators.js";
@@ -11,7 +11,7 @@ app.use(cors())
 app.set("port", 4000);
 app.use(express.json())
 
-app.use('/login',login)
+app.use('/',routeAccess)
 
 
 app.listen(app.get("port"));
