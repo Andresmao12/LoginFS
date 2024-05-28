@@ -16,6 +16,14 @@ form.addEventListener("submit", async (e) => {
     body: JSON.stringify({ user, phone, nPsw, cPsw }),
   });
 
-  const message = await res.json();
-  console.log(message.message);
+  const data = await res.json();
+
+  if (data.status == "success") {
+    alert(data.message);
+    window.location.href = data.redirect;
+    return;
+  }
+
+  console.log(data.message)
+
 });

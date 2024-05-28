@@ -7,21 +7,19 @@ form.addEventListener("submit", async (e) => {
 
   const url = "http://127.0.0.1:4000/";
 
-  console.log(user, psw);
-
-  try {
-    const resP = await fetch(url, {
+    const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user, psw }),
     });
 
-    if (resP.ok) {
-      console.log(await resP.json());
-    } else {
-      console.log(await resP.json());
+    const data = await res.json();
+
+    if (data.status == 'success') {
+      window.location.href = data.redirect;
+      console.log(data.message)
+      return;
     }
-  } catch (e) {
-    console.log(e);
-  }
+
+    console.log(data.message)
 });

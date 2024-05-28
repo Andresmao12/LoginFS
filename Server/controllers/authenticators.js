@@ -1,8 +1,10 @@
+const bcryptjs = require('bcryptjs')
+
 const users = [
   {
     user: "test",
     phone: "1234",
-    password: "1234",
+    password: "$2a$05$b.g0h.KTKR/XXvoRFTOjSe2FOmW/aB1avCITYcvBlR9emmE.27tOa",
   },
 ];
 
@@ -28,19 +30,24 @@ async function register(req, res) {
       .send({ status: "Error", message: "El usuario ya existe" });
   }
 
-  nUser = { user, phone, password: nPsw };
+
+  const salt = await bcryptjs.genSalt(5);
+  const hashPassword = await bcryptjs.hash(nPsw, salt);
+
+  nUser = { user, phone, password: hashPassword };
   users.push(nUser);
 
+console.log(`Hash password: ${hashPassword}`)
+
   res
-    .status(200)
-    .send({ status: "Success", message: "Se registro correctamente" });
+    .status(201)
+    .send({ status: "success", message: `El usuario ${user} se registro correctamente`, redirect: 'login.html' });
 
   console.log(users);
 }
 
 async function login(req, res) {
   const { user, psw } = req.body;
-  console.log(`User: ${user} - psw: ${psw}`);
 
   if (!user || !psw) {
     return res
@@ -48,16 +55,16 @@ async function login(req, res) {
       .send({ status: "Error", message: "Los datos están incompletos" });
   }
 
-  if (user !== "test") {
+  if (!users.some(e => e.user == user)) {
     return res
       .status(400)
-      .send({ status: "Error", message: "El usuario está incorrecto" });
+      .send({ status: "Error", message: "El usuario es incorrecto" });
   }
 
   // Si pasa las validaciones
   res
     .status(200)
-    .send({ status: "Success", message: "Inicio de sesión exitoso" });
+    .send({ status: "success", message: "Inicio de sesión exitoso", redirect: './../admin.html' });
 }
 
 module.exports = { register, login };
