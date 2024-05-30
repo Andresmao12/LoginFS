@@ -22,6 +22,10 @@ form.addEventListener("submit", async (e) => {
     alert(data.message);
     window.location.href = data.redirect;
     return;
+  }else{
+    const contMsg = document.querySelector(".cont-msg");
+    contMsg.classList.remove('hidden')
+    contMsg.children[0].innerHTML = data.message;
   }
 
   console.log(data.message)

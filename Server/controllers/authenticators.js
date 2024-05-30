@@ -1,10 +1,10 @@
-const bcryptjs = require('bcryptjs')
+const bcryptjs = require("bcryptjs");
 
 const users = [
   {
     user: "test",
     phone: "1234",
-    password: "$2a$05$b.g0h.KTKR/XXvoRFTOjSe2FOmW/aB1avCITYcvBlR9emmE.27tOa",
+    password: "$2a$05$a3CH893YfUWTh0ApeE0Mr.D5kmw2nyHbbasJLu/kl5y4Ci/1PxgtO",
   },
 ];
 
@@ -30,18 +30,19 @@ async function register(req, res) {
       .send({ status: "Error", message: "El usuario ya existe" });
   }
 
-
   const salt = await bcryptjs.genSalt(5);
   const hashPassword = await bcryptjs.hash(nPsw, salt);
 
   nUser = { user, phone, password: hashPassword };
   users.push(nUser);
 
-console.log(`Hash password: ${hashPassword}`)
+  console.log(`Hash password: ${hashPassword}`);
 
-  res
-    .status(201)
-    .send({ status: "success", message: `El usuario ${user} se registro correctamente`, redirect: 'login.html' });
+  res.status(201).send({
+    status: "success",
+    message: `El usuario ${user} se registro correctamente`,
+    redirect: "login.html",
+  });
 
   console.log(users);
 }
@@ -55,16 +56,28 @@ async function login(req, res) {
       .send({ status: "Error", message: "Los datos están incompletos" });
   }
 
-  if (!users.some(e => e.user == user)) {
+  const userReview = users.find((e) => e.user == user);
+
+  if (!userReview) {
     return res
       .status(400)
-      .send({ status: "Error", message: "El usuario es incorrecto" });
+      .send({ status: "Error", message: "Los datos son incorrectos" });
+  }
+
+  const loginCorrecto = await bcryptjs.compare(psw, userReview.password);
+
+  if (!loginCorrecto) {
+      return res
+        .status(400)
+        .send({ status: "Error", message: "Los datos son incorrectos" });
   }
 
   // Si pasa las validaciones
-  res
-    .status(200)
-    .send({ status: "success", message: "Inicio de sesión exitoso", redirect: './../admin.html' });
+  return res.status(200).send({
+    status: "success",
+    message: "Inicio de sesión exitoso",
+    redirect: "./../admin.html",
+  });
 }
 
 module.exports = { register, login };

@@ -102,3 +102,18 @@ form button {
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
+
+.msg-error{
+  color: #f00;
+  font-size: 12px;
+  position: absolute;
+}
+
+.cont-msg{
+  position: relative;
+  height: 0;
+}
+
+.hidden{
+  display: none !important;
+}
