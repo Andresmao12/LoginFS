@@ -1,11 +1,12 @@
 const form = document.getElementById("form-login");
+const url = "http://127.0.0.1:4000/";
+const contMsg = document.querySelector(".cont-msg");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const user = document.getElementById("user").value;
   const psw = document.getElementById("password").value;
 
-  const url = "http://127.0.0.1:4000/";
 
   const res = await fetch(url, {
     method: "POST",
@@ -20,7 +21,6 @@ form.addEventListener("submit", async (e) => {
     console.log(data.message);
     return;
   } else {
-    const contMsg = document.querySelector(".cont-msg");
     contMsg.classList.remove("hidden");
     contMsg.children[0].innerHTML = data.message;
   }

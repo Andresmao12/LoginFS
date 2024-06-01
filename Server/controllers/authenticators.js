@@ -1,4 +1,6 @@
 const bcryptjs = require("bcryptjs");
+const jsonWT = require("jsonwebtoken");
+const dotenv = require("dotenv");
 
 const users = [
   {
@@ -10,6 +12,7 @@ const users = [
 
 async function register(req, res) {
   const { user, phone, nPsw, cPsw } = req.body;
+  console.log('User: ' + user + ' Password: ' + nPsw)
 
   if (!user || !phone || !nPsw || !cPsw) {
     return res
@@ -36,8 +39,6 @@ async function register(req, res) {
   nUser = { user, phone, password: hashPassword };
   users.push(nUser);
 
-  console.log(`Hash password: ${hashPassword}`);
-
   res.status(201).send({
     status: "success",
     message: `El usuario ${user} se registro correctamente`,
@@ -49,6 +50,8 @@ async function register(req, res) {
 
 async function login(req, res) {
   const { user, psw } = req.body;
+  console.log('User: ' + user + ' Password: ' + psw)
+
 
   if (!user || !psw) {
     return res
@@ -67,9 +70,9 @@ async function login(req, res) {
   const loginCorrecto = await bcryptjs.compare(psw, userReview.password);
 
   if (!loginCorrecto) {
-      return res
-        .status(400)
-        .send({ status: "Error", message: "Los datos son incorrectos" });
+    return res
+      .status(400)
+      .send({ status: "Error", message: "Los datos son incorrectos" });
   }
 
   // Si pasa las validaciones
@@ -80,4 +83,20 @@ async function login(req, res) {
   });
 }
 
-module.exports = { register, login };
+
+async function userValidation(req, res){
+  const {user} = req.body;
+
+
+  const exist = users.some((e) => e.user === user);
+
+  if (exist) {
+    return res
+      .status(400)
+      .send({ status: "Error", message: "El usuario ya existe" });
+  }
+
+  return res.status(200).send({ status: "success", message: "Usuario valido" })
+}
+
+module.exports = { register, login, userValidation };
