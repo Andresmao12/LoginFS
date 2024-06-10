@@ -5,7 +5,7 @@ const routes = require("express").Router();
 // routes.get('/', login)
 // routes.get('/register', register)
 
-routes.post("/", login);
+routes.post("/login", login);
 routes.post("/register", register);
 routes.post("/register/userValidation", userValidation);
 

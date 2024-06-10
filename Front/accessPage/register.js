@@ -1,5 +1,5 @@
 const form = document.querySelector(".form-register");
-const url = "http://127.0.0.1:4000/register"
+const url = "http://127.0.0.1:4000/register";
 const contMsg = document.querySelector(".cont-msg");
 
 form.addEventListener("submit", async (e) => {
@@ -21,36 +21,33 @@ form.addEventListener("submit", async (e) => {
   const data = await res.json();
 
   if (data.status == "success") {
-    alert(data.message);
+    alert(data.message); //FALTA SER REDIRIGIDO
+    alert(data.redirect)
     window.location.href = data.redirect;
     return;
-  }else{
-    contMsg.classList.remove('hidden')
+  } else {
+    contMsg.classList.remove("hidden");
     contMsg.children[0].innerHTML = data.message;
   }
 
-  console.log(data.message)
-
+  console.log(data.message);
 });
 
+const inpUser = document.getElementById("user");
 
-const inpUser = document.getElementById('user')
-
-inpUser.addEventListener('keyup', async () => {
-
+inpUser.addEventListener("keyup", async () => {
   const res = await fetch(url + "/userValidation", {
-    method : "POST",
-    headers: {"Content-Type" : "application/json"},
-    body: JSON.stringify({"user" : inpUser.value})
-  })
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user: inpUser.value }),
+  });
 
   const data = await res.json();
 
-  if (res.ok) {
-    contMsg.classList.add('hidden')
-  }else if (!res.ok){
-    contMsg.classList.remove('hidden')
+  if (data.status == "success") {
+    contMsg.classList.add("hidden");
+  } else {
+    contMsg.classList.remove("hidden");
     contMsg.children[0].innerHTML = data.message;
   }
-
-})
+});

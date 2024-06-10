@@ -1,5 +1,5 @@
 const form = document.getElementById("form-login");
-const url = "http://127.0.0.1:4000/";
+const url = "http://127.0.0.1:4000/login";
 const contMsg = document.querySelector(".cont-msg");
 
 form.addEventListener("submit", async (e) => {

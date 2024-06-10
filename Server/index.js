@@ -9,6 +9,7 @@ app.listen(app.get("port"));
 
 console.log("Corriendo servidor en el puerto " + app.get("port"));
 
+
 app.use(cors());
 app.use(express.json());
 
